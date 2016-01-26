@@ -34,8 +34,18 @@ impl UnsecureConnection
     pub fn read(&mut self) -> String
     {
         let mut buf = String::new();
-        let bytes = self.reader.read_line(&mut buf).unwrap();
-        buf
+        let bytes = match self.reader.read_line(&mut buf)
+        {
+            Ok(x) => x,
+            Err(_) => 0,
+        };
+        if bytes == 0
+        {
+            return None
+        } else
+        {
+            Some(buf)
+        }
     }
 
 }
