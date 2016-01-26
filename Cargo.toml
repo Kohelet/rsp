@@ -1,0 +1,16 @@
+[package]
+name = "rsp"
+version = "0.1.0"
+authors = ["Kohelet <kohelet@cyclonecobra.com>"]
+[features]
+ssl = ["openssl"]
+
+[dependencies]
+regex = "*"
+regex_macros = "*"
+chrono = "*"
+rand = "*"
+
+[dependencies.openssl]
+openssl = "*"
+optional = true
