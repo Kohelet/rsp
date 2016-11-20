@@ -10,7 +10,6 @@ use std::process::exit;
 use utils::rand::{thread_rng, Rng};
 
 
-<<<<<<< HEAD
 pub struct Commands
 {
     PING: Regex,
@@ -20,6 +19,7 @@ pub struct Commands
     REFRAD: Regex,
     COMMIT: Regex,
     TIMELEFT: Regex,
+    KOREA: Regex,
     QUOTE: Regex,
     LINK: Regex,
 }
@@ -35,33 +35,20 @@ impl Commands
         let REFRAD: Regex = Regex::new(r".*(\.refrad)+\s([0-9]+)*(.*).*").unwrap();
         let COMMIT: Regex = Regex::new(r".*(\.commitment)+\s([0-9]+)*(.*).*").unwrap();
         let TIMELEFT: Regex = Regex::new(r".*(\.commitment|\.refrad)+\s([^!][0-9]+)*(.*).*").unwrap();
+        let KOREA: Regex = Regex::new(r".*(\.korea)+\s*(.*).*").unwrap();
         let QUOTE: Regex = Regex::new(r".*(\.quote)+\s*(.*).*").unwrap();
         let LINK: Regex = Regex::new(r"^(https?://).*").unwrap();
         Commands { PING: PING, PRIVMSG: PRIVMSG, HELP: HELP, DAYS: DAYS, REFRAD: REFRAD,
-            COMMIT: COMMIT, TIMELEFT: TIMELEFT,  QUOTE: QUOTE, LINK: LINK}
+            COMMIT: COMMIT, TIMELEFT: TIMELEFT, KOREA: KOREA, QUOTE: QUOTE, LINK: LINK}
     }
 }
-=======
-static PING: Regex = regex!(r".*(PING)\s+:(\w+)");
-static PRIVMSG: Regex = regex!(r"^:(\w+)!.*(PRIVMSG)\s+(.\w+)\s+:(.+)+");
-static HELP: Regex = regex!(r".*(\.help).*");
-static DAYS: Regex = regex!(r".*(\.days)+\s([^!][0-9]+)*(.*).*");
-static TIMELEFT: Regex = regex!(r".*(\.commitment|\.refrad)+\s([^!][0-9]+)*(.*).*");
-static QUOTE: Regex = regex!(r".*(\.quote)+\s*(.*).*");
-static LINK: Regex = regex!(r"^(https?://).*");
-
-static QUOTEFILE: &str = ""
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
 
 pub struct IrcHandler
 {
     connection: SSLConnection,
     graddates: HashMap<&'static str, NaiveDate>,
     quotes: HashMap<u32, String>,
-<<<<<<< HEAD
     commands: Commands,
-=======
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
 }
 
 impl  IrcHandler
@@ -71,12 +58,8 @@ impl  IrcHandler
         let mut cnx = IrcHandler::build(host, port);
         let mut days = IrcHandler::initDays();
         let mut quotes = IrcHandler::initQuotes();
-<<<<<<< HEAD
         let mut commands = Commands::new();
         IrcHandler{connection: cnx, graddates: days, quotes: quotes, commands: commands}
-=======
-        IrcHandler{connection: cnx, graddates: days, quotes: quotes}
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
     }
 
     fn build(host: &str, port: u16) -> SSLConnection 
@@ -112,11 +95,7 @@ impl  IrcHandler
 
     fn initQuotes() -> HashMap<u32, String>
     {
-<<<<<<< HEAD
-        let mut fh = File::open("/path/to/quotes/file").unwrap();
-=======
-        let mut fh = File::open(QUOTEFILE).unwrap();
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
+        let mut fh = File::open("/home/kohelet/quotes.txt").unwrap();
         let mut reader = BufReader::new(fh);
         
         let mut lines = reader.lines();
@@ -127,6 +106,7 @@ impl  IrcHandler
             let mut splitter = line.unwrap();
             let index = splitter.split("|").nth(0).unwrap().parse::<u32>().unwrap();
             let s = splitter.split("|").nth(1).unwrap().to_string();
+            //println!("Index: {:?}, S: {:?}", index, s);
             quotes.insert(index, s);
         }
         return quotes;
@@ -155,7 +135,6 @@ impl  IrcHandler
         println!("{}", line);
         match &line
         {
-<<<<<<< HEAD
             m if self.commands.PING.is_match(&m) =>
             {
                 let resp = self.commands.PING.captures(&m).unwrap().at(2).unwrap();
@@ -165,17 +144,6 @@ impl  IrcHandler
             m if self.commands.PRIVMSG.is_match(&m) =>
             {
                 let info = self.commands.PRIVMSG.captures(&m).unwrap();
-=======
-            m if PING.is_match(&m) =>
-            {
-                let resp = PING.captures(&m).unwrap().at(2).unwrap();
-                println!("Sending PONG: {}", resp);
-                self.send_pong(resp);
-            },
-            m if PRIVMSG.is_match(&m) =>
-            {
-                let info = PRIVMSG.captures(&m).unwrap();
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
                 let username = info.at(1).unwrap();
                 let mut channel = info.at(3).unwrap();
                 let message = info.at(4).unwrap();
@@ -193,24 +161,14 @@ impl  IrcHandler
     {
         match &message
         {
-<<<<<<< HEAD
             m if self.commands.HELP.is_match(&m) =>
-=======
-            m if HELP.is_match(&m) =>
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
             {
                 println!("Sending generic help to {}", username);
                 self.displayHelp(username);
             },
-<<<<<<< HEAD
             m if self.commands.DAYS.is_match(&m) =>
             {
                 let info = match self.commands.DAYS.captures(&m)
-=======
-            m if DAYS.is_match(&m) =>
-            {
-                let info = match DAYS.captures(&m)
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
                 {
                     None => return,
                     Some(x) => Some(x)
@@ -256,15 +214,9 @@ impl  IrcHandler
                     self.send(&sendStr);
                 }
             },
-<<<<<<< HEAD
             m if self.commands.TIMELEFT.is_match(&m) =>
             {
                 let info = match self.commands.TIMELEFT.captures(&m)
-=======
-            m if TIMELEFT.is_match(&m) =>
-            {
-                let info = match TIMELEFT.captures(&m)
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
                 {
                     None => None,
                     Some(x) => Some(x)
@@ -327,7 +279,6 @@ impl  IrcHandler
                     self.send(&sendStr);
                 }
             },
-<<<<<<< HEAD
             m if self.commands.KOREA.is_match(&m) =>
             {
                 let koreadate = NaiveDate::from_ymd(2016,05,20);
@@ -337,24 +288,15 @@ impl  IrcHandler
                 self.send(&sendStr);
             },
             m if self.commands.QUOTE.is_match(&m) =>
-=======
-            m if QUOTE.is_match(&m) =>
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
             {
                 let mut rng = thread_rng();
                 let n: u32 = rng.gen_range(1,40);
                 let sendStr = format!("PRIVMSG {} :{}", channel, self.quotes.get(&n).unwrap());
                 self.send(&sendStr);
             },
-<<<<<<< HEAD
             m if self.commands.LINK.is_match(&m) =>
             {
                 let sendStr = format!("PRIVMSG {} :{}", username, "Please place links in #ctdt-links unless you are planning to discuss the link.");
-=======
-            m if LINK.is_match(&m) =>
-            {
-                let sendStr = format!("PRIVMSG {} :{}", username, "Please place links in appropriate channel unless you are planning to discuss the link.");
->>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
                 self.send(&sendStr);
             },
             _ => ()
