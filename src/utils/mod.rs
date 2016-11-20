@@ -1,5 +1,5 @@
 #![feature(plugin)]
-#![plugin(regex_macros)]
+//#![plugin(regex_macros)]
 extern crate regex;
 extern crate chrono;
 extern crate rand;

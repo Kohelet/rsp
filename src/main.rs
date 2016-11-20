@@ -1,5 +1,4 @@
 #![feature(plugin)]
-#![plugin(regex_macros)]
 extern crate regex;
 use regex::Regex;
 use std::thread;
@@ -8,7 +7,7 @@ mod utils;
 
 fn main()
 {
-    let host = "irc.cyclonecobra.com";
+    let host = "";
     let port: u16 = 6697;
     let ping = Regex::new(r".*(PING)\s+:(\w+)").unwrap();
     let mut handle = utils::irchandler::IrcHandler::new(host,port);
