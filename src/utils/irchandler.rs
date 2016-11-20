@@ -19,7 +19,6 @@ pub struct Commands
     REFRAD: Regex,
     COMMIT: Regex,
     TIMELEFT: Regex,
-    KOREA: Regex,
     QUOTE: Regex,
     LINK: Regex,
 }
@@ -35,11 +34,10 @@ impl Commands
         let REFRAD: Regex = Regex::new(r".*(\.refrad)+\s([0-9]+)*(.*).*").unwrap();
         let COMMIT: Regex = Regex::new(r".*(\.commitment)+\s([0-9]+)*(.*).*").unwrap();
         let TIMELEFT: Regex = Regex::new(r".*(\.commitment|\.refrad)+\s([^!][0-9]+)*(.*).*").unwrap();
-        let KOREA: Regex = Regex::new(r".*(\.korea)+\s*(.*).*").unwrap();
         let QUOTE: Regex = Regex::new(r".*(\.quote)+\s*(.*).*").unwrap();
         let LINK: Regex = Regex::new(r"^(https?://).*").unwrap();
         Commands { PING: PING, PRIVMSG: PRIVMSG, HELP: HELP, DAYS: DAYS, REFRAD: REFRAD,
-            COMMIT: COMMIT, TIMELEFT: TIMELEFT, KOREA: KOREA, QUOTE: QUOTE, LINK: LINK}
+            COMMIT: COMMIT, TIMELEFT: TIMELEFT, QUOTE: QUOTE, LINK: LINK}
     }
 }
 
@@ -95,7 +93,7 @@ impl  IrcHandler
 
     fn initQuotes() -> HashMap<u32, String>
     {
-        let mut fh = File::open("/home/kohelet/quotes.txt").unwrap();
+        let mut fh = File::open("/path/to/quote/file").unwrap();
         let mut reader = BufReader::new(fh);
         
         let mut lines = reader.lines();
@@ -278,14 +276,6 @@ impl  IrcHandler
                     let sendStr = format!("PRIVMSG {} :The class of {}'s commitment ends today!", channel, year);
                     self.send(&sendStr);
                 }
-            },
-            m if self.commands.KOREA.is_match(&m) =>
-            {
-                let koreadate = NaiveDate::from_ymd(2016,05,20);
-                let today = Local::today().naive_local();
-                let days = (today - koreadate).num_days();
-                let sendStr = format!("PRIVMSG {} :There are {} and a butt days until turnersr is free from the clutches of Kim Jon Un!", channel, days.abs() -1);
-                self.send(&sendStr);
             },
             m if self.commands.QUOTE.is_match(&m) =>
             {
