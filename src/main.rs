@@ -1,4 +1,8 @@
 #![feature(plugin)]
+<<<<<<< HEAD
+=======
+#![plugin(regex_macros)]
+>>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
 extern crate regex;
 use regex::Regex;
 use std::thread;
@@ -15,8 +19,12 @@ fn main()
         handle.send("NICK RainbowSandPony");
         handle.send("USER kohelet * * :kohelet");
         thread::sleep_ms(2000);
+<<<<<<< HEAD
         handle.send("JOIN #ctdt");
         handle.send("JOIN #ctdt-links");
+=======
+        handle.send("JOIN <channel>");
+>>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
     }
     loop
     {

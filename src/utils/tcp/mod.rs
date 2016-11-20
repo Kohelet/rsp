@@ -31,6 +31,7 @@ impl UnsecureConnection
         self.writer.write_fmt(format_args!("{}\r\n", to_send));
         self.writer.flush();
     }
+<<<<<<< HEAD
     pub fn read(&mut self) -> Option<String>
     {
         let mut buf = String::new();
@@ -46,6 +47,13 @@ impl UnsecureConnection
         {
             Some(buf)
         }
+=======
+    pub fn read(&mut self) -> String
+    {
+        let mut buf = String::new();
+        let bytes = self.reader.read_line(&mut buf).unwrap();
+        buf
+>>>>>>> 48aa855df1aeb319d865cef7f05d988c62f82de5
     }
 
 }
